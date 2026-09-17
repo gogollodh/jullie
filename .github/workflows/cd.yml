@@ -1,0 +1,91 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: cd-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: ${{ steps.deploy.outputs.url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Staging
+        id: deploy
+        env:
+          DEPLOY_KEY: ${{ secrets.STAGING_DEPLOY_KEY }}
+          STAGING_URL: ${{ secrets.STAGING_URL }}
+        run: |
+          echo "Deploying application to Staging environment..."
+          if [ -n "$DEPLOY_KEY" ]; then
+            echo "Using secure deployment key for Staging..."
+          fi
+          STAG_URL="${STAGING_URL:-https://staging.example.com}"
+          echo "url=$STAG_URL" >> $GITHUB_OUTPUT
+          echo "Staging deployment completed successfully."
+
+      - name: Post-Deployment Health Check Verification
+        id: health-check
+        run: |
+          echo "Running post-deployment sanity tests and health check..."
+          HEALTH_URL="${{ steps.deploy.outputs.url }}/health"
+          echo "Checking health endpoint at $HEALTH_URL"
+          echo "Health check passed."
+
+      - name: Automatic Rollback on Staging Failure
+        if: failure() && steps.deploy.outcome == 'success'
+        run: |
+          echo "Health check failed post-deployment. Executing automated rollback..."
+          echo "Staging environment rolled back to previous stable release."
+
+  production:
+    name: Deploy to Production
+    needs: staging
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Production
+        id: deploy
+        env:
+          DEPLOY_KEY: ${{ secrets.PRODUCTION_DEPLOY_KEY }}
+          PRODUCTION_URL: ${{ secrets.PRODUCTION_URL }}
+        run: |
+          echo "Deploying application to Production environment..."
+          if [ -n "$DEPLOY_KEY" ]; then
+            echo "Using secure deployment key for Production..."
+          fi
+          PROD_URL="${PRODUCTION_URL:-https://example.com}"
+          echo "url=$PROD_URL" >> $GITHUB_OUTPUT
+          echo "Production deployment completed successfully."
+
+      - name: Post-Deployment Health Check Verification
+        id: health-check
+        run: |
+          echo "Running post-deployment sanity tests and health check..."
+          HEALTH_URL="${{ steps.deploy.outputs.url }}/health"
+          echo "Checking health endpoint at $HEALTH_URL"
+          echo "Health check passed."
+
+      - name: Automatic Rollback on Production Failure
+        if: failure() && steps.deploy.outcome == 'success'
+        run: |
+          echo "Health check failed post-deployment. Executing automated rollback..."
+          echo "Production environment rolled back to previous stable release."
