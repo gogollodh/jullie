@@ -17,3 +17,19 @@ This repository includes a GitHub Actions Continuous Deployment pipeline (`.gith
    - Secure deployment using encrypted secrets.
    - Performs post-deployment health check verification.
    - Automatically executes rollback on health check failure.
+
+## Developer Setup & Git Hooks
+
+Custom native pre-commit git hooks are included in `.githooks/` to ensure syntax verification and prevent committing code with unresolved merge conflicts.
+
+To set up git hooks after cloning the repository, run:
+
+```sh
+git config core.hooksPath .githooks
+```
+
+Or execute the onboarding script:
+
+```sh
+./.githooks/setup.sh
+```
