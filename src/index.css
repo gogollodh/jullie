@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: #faf8f5;
+    color: #111613;
+  }
+}
+
+/* Custom scrollbar for dark botanical aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0e2319;
+}
+::-webkit-scrollbar-thumb {
+  background: #2d5a3f;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4a8a60;
+}
+
+/* Custom subtle glassmorphism */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(236, 230, 219, 0.6);
+}
+
+.glass-panel-dark {
+  background: rgba(14, 35, 25, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(45, 90, 63, 0.3);
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #e1d8c9 0%, #aa9982 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
