@@ -67,7 +67,7 @@ export const ShopProvider = ({ children }) => {
 
   // Toast Notification helper
   const addToast = useCallback((message, type = 'success') => {
-    const id = Date.now();
+    const id = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
     setToasts((prev) => [...prev, { id, message, type }]);
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
@@ -118,16 +118,20 @@ export const ShopProvider = ({ children }) => {
 
   // Wishlist actions
   const toggleWishlist = useCallback((product) => {
+    let message = '';
     setWishlist((prev) => {
       const exists = prev.some((id) => id === product.id);
       if (exists) {
-        addToast(`Removed "${product.name}" from wishlist`);
+        message = `Removed "${product.name}" from wishlist`;
         return prev.filter((id) => id !== product.id);
       } else {
-        addToast(`Saved "${product.name}" to wishlist ❤️`);
+        message = `Saved "${product.name}" to wishlist ❤️`;
         return [...prev, product.id];
       }
     });
+    if (message) {
+      addToast(message);
+    }
   }, [addToast]);
 
   // Recently Viewed

@@ -81,7 +81,7 @@ check_file() {
                 fi
             fi
             ;;
-        *.js|*.mjs|*.cjs|*.jsx)
+        *.js|*.mjs|*.cjs)
             if command -v node >/dev/null 2>&1; then
                 if ! node --check "$staged_file" >/dev/null 2>&1; then
                     log_error "$file" "JavaScript syntax error detected."
@@ -139,6 +139,19 @@ while IFS= read -r file; do
     [ -z "$file" ] && continue
     check_file "$file"
 done < "$TMP_LIST"
+
+# Run test suite via npm test if package.json exists and npm is available
+if [ -f "package.json" ] && [ -z "${npm_lifecycle_event:-}" ] && [ "${SKIP_NPM_TEST:-0}" != "1" ]; then
+    if command -v npm >/dev/null 2>&1; then
+        echo "Running full test suite via npm test..."
+        if ! npm test; then
+            echo "  [ERROR] npm test failed." >&2
+            echo "error" >> "$TMP_ERR"
+        fi
+    else
+        echo "  [WARNING] npm not found in PATH, skipping npm test execution." >&2
+    fi
+fi
 
 if [ -s "$TMP_ERR" ]; then
     echo "--------------------------------------------------------" >&2
