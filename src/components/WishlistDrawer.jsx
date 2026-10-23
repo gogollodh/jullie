@@ -2,6 +2,7 @@ import React from 'react';
 import { useShop } from '../context/ShopContext';
 import { PRODUCTS } from '../data/products';
 import { X, Heart, ShoppingBag, Trash2 } from 'lucide-react';
+import { handleImageError } from '../utils/imageFallback';
 
 export const WishlistDrawer = () => {
   const {
@@ -55,6 +56,7 @@ export const WishlistDrawer = () => {
                     src={product.image}
                     alt={product.name}
                     className="w-20 h-20 object-cover rounded-xl border border-beige-200 shrink-0 bg-beige-100 cursor-pointer"
+                    onError={handleImageError}
                     onClick={() => {
                       setIsWishlistOpen(false);
                       viewProductDetails(product);

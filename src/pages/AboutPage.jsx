@@ -1,6 +1,7 @@
 import React from 'react';
 import { useShop } from '../context/ShopContext';
 import { Leaf, Sparkles, Compass, ShieldCheck, Heart, ArrowRight } from 'lucide-react';
+import { handleImageError } from '../utils/imageFallback';
 
 export const AboutPage = () => {
   const { navigateTo } = useShop();
@@ -31,6 +32,7 @@ export const AboutPage = () => {
             src="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&w=1000&q=80"
             alt="Greenhouse Laboratory"
             className="w-full h-full object-cover"
+            onError={handleImageError}
           />
         </div>
 

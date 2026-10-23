@@ -1,6 +1,7 @@
 import React from 'react';
 import { useShop } from '../context/ShopContext';
 import { Package, Truck, CheckCircle, Clock, MapPin, ShieldCheck, ArrowRight } from 'lucide-react';
+import { handleImageError } from '../utils/imageFallback';
 
 export const AccountPage = () => {
   const { orders, navigateTo } = useShop();
@@ -93,7 +94,7 @@ export const AccountPage = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {order.items.map((item, idx) => (
                       <div key={idx} className="flex items-center gap-3 p-3 bg-beige-50 rounded-xl border border-beige-200/80">
-                        <img src={item.image} alt="" className="w-12 h-12 rounded-lg object-cover bg-beige-200 shrink-0" />
+                        <img src={item.image} alt="" className="w-12 h-12 rounded-lg object-cover bg-beige-200 shrink-0" onError={handleImageError} />
                         <div className="text-xs">
                           <span className="font-bold text-forest-950 block">{item.name}</span>
                           <span className="text-charcoal-800/60">Qty: {item.qty} • ${item.price.toFixed(2)}</span>

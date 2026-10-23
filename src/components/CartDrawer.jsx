@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useShop } from '../context/ShopContext';
 import { X, Trash2, ShoppingBag, ArrowRight, ShieldCheck, Tag } from 'lucide-react';
+import { handleImageError } from '../utils/imageFallback';
 
 export const CartDrawer = () => {
   const {
@@ -80,6 +81,7 @@ export const CartDrawer = () => {
                     src={item.product.image}
                     alt={item.product.name}
                     className="w-20 h-20 object-cover rounded-xl border border-beige-200 shrink-0 bg-beige-100"
+                    onError={handleImageError}
                   />
                   <div className="flex-1 min-w-0">
                     <h4 className="font-serif text-sm font-bold text-charcoal-900 truncate">

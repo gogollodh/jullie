@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useShop } from '../context/ShopContext';
 import { GUIDES } from '../data/guides';
 import { BookOpen, Search, Sparkles, ArrowLeft, Sun, Droplets, ShieldAlert, Check } from 'lucide-react';
+import { handleImageError } from '../utils/imageFallback';
 
 export const PlantCarePage = () => {
   const { selectedGuideId, setSelectedGuideId } = useShop();
@@ -84,7 +85,7 @@ export const PlantCarePage = () => {
             </div>
 
             <div className="aspect-[16/9] rounded-2xl overflow-hidden bg-beige-100">
-              <img src={activeGuide.image} alt={activeGuide.title} className="w-full h-full object-cover" />
+              <img src={activeGuide.image} alt={activeGuide.title} className="w-full h-full object-cover" onError={handleImageError} />
             </div>
 
             <div className="prose prose-stone max-w-none text-charcoal-800 leading-relaxed space-y-4 text-sm sm:text-base">
@@ -116,7 +117,7 @@ export const PlantCarePage = () => {
                   className="group bg-white rounded-3xl border border-beige-200 overflow-hidden shadow-sm hover:shadow-xl cursor-pointer transition-all flex flex-col sm:flex-row"
                 >
                   <div className="sm:w-2/5 aspect-square sm:aspect-auto overflow-hidden bg-beige-100">
-                    <img src={guide.image} alt={guide.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <img src={guide.image} alt={guide.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onError={handleImageError} />
                   </div>
                   <div className="sm:w-3/5 p-6 flex flex-col justify-between space-y-4">
                     <div>

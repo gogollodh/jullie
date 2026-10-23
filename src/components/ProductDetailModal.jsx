@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useShop } from '../context/ShopContext';
 import { PRODUCTS } from '../data/products';
 import { ProductCard } from './ProductCard';
+import { handleImageError } from '../utils/imageFallback';
 import {
   X, Star, Heart, ShoppingBag, Sun, Droplets, Thermometer,
   Gauge, ShieldCheck, Truck, Sparkles, HelpCircle, FileText, Check
@@ -55,6 +56,7 @@ export const ProductDetailModal = () => {
                   src={images[selectedImg] || product.image}
                   alt={product.name}
                   className="w-full h-full object-cover transition-all duration-300"
+                  onError={handleImageError}
                 />
                 {product.badge && (
                   <span className="absolute top-4 left-4 bg-forest-950/90 text-moss-300 text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full border border-moss-700/60 backdrop-blur-md">
@@ -74,7 +76,7 @@ export const ProductDetailModal = () => {
                         selectedImg === idx ? 'border-moss-600 scale-105 shadow-md' : 'border-beige-200 opacity-70 hover:opacity-100'
                       }`}
                     >
-                      <img src={img} alt="" className="w-full h-full object-cover" />
+                      <img src={img} alt="" className="w-full h-full object-cover" onError={handleImageError} />
                     </button>
                   ))}
                 </div>

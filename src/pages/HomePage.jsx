@@ -4,6 +4,7 @@ import { PRODUCTS, CATEGORIES } from '../data/products';
 import { GUIDES } from '../data/guides';
 import { REVIEWS } from '../data/reviews';
 import { ProductCard } from '../components/ProductCard';
+import { handleImageError } from '../utils/imageFallback';
 import {
   Sparkles, ArrowRight, ShieldCheck, Heart, Leaf, PackageCheck,
   BookOpen, Star, Instagram, Compass, Droplet, Sun, CheckCircle, Gift
@@ -63,6 +64,7 @@ export const HomePage = () => {
             src="https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&w=2000&q=85"
             alt="Carnivorous Pitcher Plant Botanical Hero"
             className="w-full h-full object-cover object-center scale-105 animate-pulse-slow"
+            onError={handleImageError}
           />
         </div>
 
@@ -167,6 +169,7 @@ export const HomePage = () => {
                 src={cat.image}
                 alt={cat.title}
                 className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700 ease-out"
+                onError={handleImageError}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-forest-950 via-forest-950/40 to-transparent" />
 
@@ -270,6 +273,7 @@ export const HomePage = () => {
                   src="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&w=1000&q=80"
                   alt="Botanical Laboratory & Exotic Plant Cultivation"
                   className="w-full h-full object-cover"
+                  onError={handleImageError}
                 />
               </div>
               <div className="absolute -bottom-6 -left-6 bg-forest-950 text-beige-50 p-6 rounded-2xl border border-moss-700 shadow-xl max-w-xs hidden sm:block">
@@ -362,6 +366,7 @@ export const HomePage = () => {
                 src="https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=800&q=80"
                 alt="Apothecary Glass Terrarium Ecosystem"
                 className="w-full h-full object-cover"
+                onError={handleImageError}
               />
             </div>
           </div>
@@ -429,6 +434,7 @@ export const HomePage = () => {
                   src={guide.image}
                   alt={guide.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={handleImageError}
                 />
               </div>
               <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
@@ -478,7 +484,7 @@ export const HomePage = () => {
                 </div>
 
                 <div className="pt-4 border-t border-beige-200/80 flex items-center gap-3">
-                  <img src={rev.image} alt="" className="w-10 h-10 rounded-full object-cover border border-moss-700" />
+                  <img src={rev.image} alt="" className="w-10 h-10 rounded-full object-cover border border-moss-700" onError={handleImageError} />
                   <div>
                     <h4 className="text-xs font-bold text-forest-950">{rev.author}</h4>
                     <span className="text-[10px] text-charcoal-800/60 block">{rev.role} • {rev.location}</span>
@@ -513,7 +519,7 @@ export const HomePage = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {instagramPosts.map((post) => (
             <div key={post.id} className="group relative aspect-square rounded-2xl overflow-hidden bg-forest-950 cursor-pointer shadow-md">
-              <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-90" />
+              <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-90" onError={handleImageError} />
               <div className="absolute inset-0 bg-forest-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-3 text-center text-white">
                 <Instagram className="w-6 h-6 text-moss-300 mb-1" />
                 <span className="text-[10px] font-bold">{post.tag}</span>

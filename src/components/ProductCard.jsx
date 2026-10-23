@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import { useShop } from '../context/ShopContext';
 import { Heart, ShoppingBag, Eye, Star, Sparkles } from 'lucide-react';
+import { handleImageError } from '../utils/imageFallback';
 
 export const ProductCard = memo(({ product }) => {
   const { addToCart, wishlist, toggleWishlist, viewProductDetails } = useShop();
@@ -32,6 +33,7 @@ export const ProductCard = memo(({ product }) => {
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
           loading="lazy"
+          onError={handleImageError}
         />
 
         {/* Top Badges */}
