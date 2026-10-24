@@ -3,6 +3,7 @@ import { useShop } from '../context/ShopContext';
 import { PRODUCTS } from '../data/products';
 import { ProductCard } from './ProductCard';
 import { handleImageError } from '../utils/imageFallback';
+import { AccessibleImage } from './ui/AccessibleImage';
 import {
   X, Star, Heart, ShoppingBag, Sun, Droplets, Thermometer,
   Gauge, ShieldCheck, Truck, Sparkles, HelpCircle, FileText, Check
@@ -75,11 +76,12 @@ export const ProductDetailModal = () => {
                     <button
                       key={idx}
                       onClick={() => setSelectedImg(idx)}
+                      aria-label={`View ${product.name} image ${idx + 1}`}
                       className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
                         selectedImg === idx ? 'border-moss-600 scale-105 shadow-md' : 'border-beige-200 opacity-70 hover:opacity-100'
                       }`}
                     >
-                      <img src={img} alt="" className="w-full h-full object-cover" onError={handleImageError} />
+                      <AccessibleImage src={img} alt={`${product.name} thumbnail ${idx + 1}`} className="w-full h-full object-cover" onError={handleImageError} />
                     </button>
                   ))}
                 </div>

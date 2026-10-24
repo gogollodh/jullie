@@ -5,6 +5,7 @@ import { GUIDES } from '../data/guides';
 import { REVIEWS } from '../data/reviews';
 import { ProductCard } from '../components/ProductCard';
 import { handleImageError } from '../utils/imageFallback';
+import { AccessibleImage } from '../components/ui/AccessibleImage';
 import {
   Sparkles, ArrowRight, ShieldCheck, Heart, Leaf, PackageCheck,
   BookOpen, Star, Instagram, Compass, Droplet, Sun, CheckCircle, Gift
@@ -484,7 +485,7 @@ export const HomePage = () => {
                 </div>
 
                 <div className="pt-4 border-t border-beige-200/80 flex items-center gap-3">
-                  <img src={rev.image} alt="" className="w-10 h-10 rounded-full object-cover border border-moss-700" onError={handleImageError} />
+                  <AccessibleImage src={rev.image} alt={`Photo of ${rev.author}`} className="w-10 h-10 rounded-full object-cover border border-moss-700" onError={handleImageError} />
                   <div>
                     <h4 className="text-xs font-bold text-forest-950">{rev.author}</h4>
                     <span className="text-[10px] text-charcoal-800/60 block">{rev.role} • {rev.location}</span>

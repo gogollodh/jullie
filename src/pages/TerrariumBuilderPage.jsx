@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useShop } from '../context/ShopContext';
 import { Sparkles, Check, ArrowRight, ShieldCheck, RefreshCw } from 'lucide-react';
 import { handleImageError } from '../utils/imageFallback';
+import { AccessibleImage } from '../components/ui/AccessibleImage';
 
 export const TerrariumBuilderPage = () => {
   const { addToCart, navigateTo } = useShop();
@@ -120,7 +121,7 @@ export const TerrariumBuilderPage = () => {
                         : 'border-beige-200 hover:border-beige-300 bg-beige-50/50'
                     }`}
                   >
-                    <img src={v.img} alt="" className="w-20 h-20 object-cover rounded-lg mb-3" onError={handleImageError} />
+                    <AccessibleImage src={v.img} alt={v.name} className="w-20 h-20 object-cover rounded-lg mb-3" onError={handleImageError} />
                     <span className="font-serif text-xs font-bold text-charcoal-900 line-clamp-2 mb-1">{v.name}</span>
                     <span className="text-xs font-bold text-moss-800">${v.price.toFixed(2)}</span>
                   </div>
