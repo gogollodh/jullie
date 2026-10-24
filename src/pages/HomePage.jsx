@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useShop } from '../context/ShopContext';
 import { PRODUCTS, CATEGORIES } from '../data/products';
 import { GUIDES } from '../data/guides';
@@ -13,8 +13,8 @@ import {
 export const HomePage = () => {
   const { navigateTo, setSelectedCategory, addToast } = useShop();
 
-  const featuredProducts = PRODUCTS.slice(0, 8);
-  const carnivorousShowcaseProducts = PRODUCTS.filter((p) => p.category === 'carnivorous').slice(0, 3);
+  const featuredProducts = useMemo(() => PRODUCTS.slice(0, 8), []);
+  const carnivorousShowcaseProducts = useMemo(() => PRODUCTS.filter((p) => p.category === 'carnivorous').slice(0, 3), []);
 
   const benefits = [
     {

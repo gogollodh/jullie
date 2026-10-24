@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useShop } from '../context/ShopContext';
 import { PRODUCTS } from '../data/products';
 import { ProductCard } from './ProductCard';
@@ -15,15 +15,18 @@ export const ProductDetailModal = () => {
   const [activeTab, setActiveTab] = useState('care'); // 'care', 'faqs', 'reviews', 'shipping'
   const [qty, setQty] = useState(1);
 
+  // Find related products in same category
+  const relatedProducts = useMemo(() => {
+    if (!selectedProduct) return [];
+    return PRODUCTS.filter(
+      (p) => p.category === selectedProduct.category && p.id !== selectedProduct.id
+    ).slice(0, 3);
+  }, [selectedProduct]);
+
   if (!selectedProduct) return null;
 
   const product = selectedProduct;
   const isWishlisted = wishlist.includes(product.id);
-
-  // Find related products in same category
-  const relatedProducts = PRODUCTS.filter(
-    (p) => p.category === product.category && p.id !== product.id
-  ).slice(0, 3);
 
   const images = product.images && product.images.length > 0 ? product.images : [product.image];
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useShop } from '../context/ShopContext';
 import { PRODUCTS } from '../data/products';
 import { X, Heart, ShoppingBag, Trash2 } from 'lucide-react';
@@ -14,9 +14,13 @@ export const WishlistDrawer = () => {
     viewProductDetails
   } = useShop();
 
-  if (!isWishlistOpen) return null;
+  const wishlistSet = useMemo(() => new Set(wishlist), [wishlist]);
 
-  const wishlistedProducts = PRODUCTS.filter((p) => wishlist.includes(p.id));
+  const wishlistedProducts = useMemo(() => {
+    return PRODUCTS.filter((p) => wishlistSet.has(p.id));
+  }, [wishlistSet]);
+
+  if (!isWishlistOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-forest-950/70 backdrop-blur-sm animate-fadeIn">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useShop } from '../context/ShopContext';
 import { GUIDES } from '../data/guides';
 import { BookOpen, Search, Sparkles, ArrowLeft, Sun, Droplets, ShieldAlert, Check } from 'lucide-react';
@@ -21,9 +21,11 @@ export const PlantCarePage = () => {
   const [experience, setExperience] = useState('beginner');
   const [recommendation, setRecommendation] = useState(null);
 
-  const filteredGuides = GUIDES.filter(
-    (g) => g.title.toLowerCase().includes(search.toLowerCase()) || g.category.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredGuides = useMemo(() => {
+    return GUIDES.filter(
+      (g) => g.title.toLowerCase().includes(search.toLowerCase()) || g.category.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [search]);
 
   const handleDiagnose = (e) => {
     e.preventDefault();
