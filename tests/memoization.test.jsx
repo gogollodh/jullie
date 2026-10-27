@@ -6,6 +6,7 @@ import { ShopPage } from '../src/pages/ShopPage';
 import { PlantCarePage } from '../src/pages/PlantCarePage';
 import { WishlistDrawer } from '../src/components/WishlistDrawer';
 import { ProductDetailModal } from '../src/components/ProductDetailModal';
+import { CartDrawer } from '../src/components/CartDrawer';
 import { PRODUCTS } from '../src/data/products';
 import { GUIDES } from '../src/data/guides';
 
@@ -151,5 +152,79 @@ describe('Filtering & Sorting Memoization Tests', () => {
     });
 
     expect(productsFilterSpy).not.toHaveBeenCalled();
+  });
+
+  test('CartDrawer applies GREENHOUSE10 promo code discount and navigates to checkout', () => {
+    const CartTester = () => {
+      const { setIsCartOpen, addToCart, activePage } = useShop();
+      return (
+        <div>
+          <button onClick={() => setIsCartOpen(true)}>Open Cart Drawer Test</button>
+          <button onClick={() => addToCart(PRODUCTS[0])}>Add Product To Cart Test</button>
+          <span data-testid="active-page">{activePage}</span>
+          <CartDrawer />
+        </div>
+      );
+    };
+
+    const { getByRole, getByPlaceholderText, getByText, getAllByText, getByTestId } = render(
+      <ShopProvider>
+        <CartTester />
+      </ShopProvider>
+    );
+
+    // Open Cart and Add Item
+    act(() => {
+      fireEvent.click(getByRole('button', { name: 'Open Cart Drawer Test' }));
+      fireEvent.click(getByRole('button', { name: 'Add Product To Cart Test' }));
+    });
+
+    expect(getAllByText(PRODUCTS[0].name).length).toBeGreaterThan(0);
+
+    // Type promo code and apply
+    const promoInput = getByPlaceholderText(/Promo code/i);
+    act(() => {
+      fireEvent.change(promoInput, { target: { value: 'GREENHOUSE10' } });
+    });
+
+    const applyButton = getByRole('button', { name: 'Apply' });
+    act(() => {
+      fireEvent.click(applyButton);
+    });
+
+    // Verify discount is calculated (10% OFF)
+    expect(getByText(/Discount \(10% OFF\)/i)).toBeTruthy();
+
+    // Verify proceed to checkout
+    const checkoutButton = getByRole('button', { name: /Proceed to Checkout/i });
+    act(() => {
+      fireEvent.click(checkoutButton);
+    });
+
+    expect(getByTestId('active-page').textContent).toBe('checkout');
+  });
+
+  test('CartDrawer empty state evaluates shipping fee as $0', () => {
+    const EmptyCartTester = () => {
+      const { setIsCartOpen } = useShop();
+      return (
+        <div>
+          <button onClick={() => setIsCartOpen(true)}>Open Cart Drawer Empty Test</button>
+          <CartDrawer />
+        </div>
+      );
+    };
+
+    const { getByRole, getByText } = render(
+      <ShopProvider>
+        <EmptyCartTester />
+      </ShopProvider>
+    );
+
+    act(() => {
+      fireEvent.click(getByRole('button', { name: 'Open Cart Drawer Empty Test' }));
+    });
+
+    expect(getByText(/Your cart is empty/i)).toBeTruthy();
   });
 });

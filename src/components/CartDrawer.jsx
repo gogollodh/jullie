@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useShop } from '../context/ShopContext';
 import { X, Trash2, ShoppingBag, ArrowRight, ShieldCheck, Tag } from 'lucide-react';
 import { handleImageError } from '../utils/imageFallback';
@@ -18,6 +18,72 @@ export const CartDrawer = () => {
   const [promoCode, setPromoCode] = useState('');
   const [discount, setDiscount] = useState(0);
 
+  const finalDiscountAmount = useMemo(() => cartTotal * discount, [cartTotal, discount]);
+  const shippingFee = useMemo(() => (cartTotal > 85 || cartTotal === 0 ? 0 : 9.99), [cartTotal]);
+  const grandTotal = useMemo(
+    () => cartTotal - finalDiscountAmount + shippingFee,
+    [cartTotal, finalDiscountAmount, shippingFee]
+  );
+
+  const renderedCartItems = useMemo(() => {
+    return cart.map((item, idx) => (
+      <div key={item.product?.id ? `${item.product.id}-${idx}` : idx} className="pt-4 first:pt-0 flex gap-4 items-center">
+        <img
+          src={item.product.image}
+          alt={item.product.name}
+          className="w-20 h-20 object-cover rounded-xl border border-beige-200 shrink-0 bg-beige-100"
+          onError={handleImageError}
+        />
+        <div className="flex-1 min-w-0">
+          <h4 className="font-serif text-sm font-bold text-charcoal-900 truncate">
+            {item.product.name}
+          </h4>
+          <span className="text-[10px] font-mono italic text-moss-700 block mb-1">
+            {item.product.scientificName}
+          </span>
+          <span className="text-xs font-bold text-forest-900 block">
+            ${item.product.price.toFixed(2)}
+          </span>
+
+          {item.customOptions && (
+            <span className="text-[10px] text-moss-800 bg-moss-100 px-2 py-0.5 rounded-md inline-block mt-1">
+              Custom Terrarium Kit
+            </span>
+          )}
+
+          {/* Quantity controls */}
+          <div className="flex items-center gap-3 mt-2">
+            <div className="flex items-center border border-beige-300 rounded-lg bg-white overflow-hidden text-xs">
+              <button
+                onClick={() => updateQuantity(idx, item.quantity - 1)}
+                className="px-2 py-1 text-charcoal-800 hover:bg-beige-100 font-bold"
+              >
+                -
+              </button>
+              <span className="px-2 py-1 font-bold min-w-[24px] text-center">
+                {item.quantity}
+              </span>
+              <button
+                onClick={() => updateQuantity(idx, item.quantity + 1)}
+                className="px-2 py-1 text-charcoal-800 hover:bg-beige-100 font-bold"
+              >
+                +
+              </button>
+            </div>
+
+            <button
+              onClick={() => removeFromCart(idx)}
+              className="text-rose-600 hover:text-rose-800 p-1 text-xs transition-colors"
+              title="Remove"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+    ));
+  }, [cart, updateQuantity, removeFromCart]);
+
   if (!isCartOpen) return null;
 
   const handleApplyPromo = (e) => {
@@ -29,10 +95,6 @@ export const CartDrawer = () => {
       addToast('Invalid promo code. Try "GREENHOUSE10"', 'info');
     }
   };
-
-  const finalDiscountAmount = cartTotal * discount;
-  const shippingFee = cartTotal > 85 || cartTotal === 0 ? 0 : 9.99;
-  const grandTotal = cartTotal - finalDiscountAmount + shippingFee;
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-forest-950/70 backdrop-blur-sm animate-fadeIn">
@@ -75,62 +137,7 @@ export const CartDrawer = () => {
                 </button>
               </div>
             ) : (
-              cart.map((item, idx) => (
-                <div key={idx} className="pt-4 first:pt-0 flex gap-4 items-center">
-                  <img
-                    src={item.product.image}
-                    alt={item.product.name}
-                    className="w-20 h-20 object-cover rounded-xl border border-beige-200 shrink-0 bg-beige-100"
-                    onError={handleImageError}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-serif text-sm font-bold text-charcoal-900 truncate">
-                      {item.product.name}
-                    </h4>
-                    <span className="text-[10px] font-mono italic text-moss-700 block mb-1">
-                      {item.product.scientificName}
-                    </span>
-                    <span className="text-xs font-bold text-forest-900 block">
-                      ${item.product.price.toFixed(2)}
-                    </span>
-
-                    {item.customOptions && (
-                      <span className="text-[10px] text-moss-800 bg-moss-100 px-2 py-0.5 rounded-md inline-block mt-1">
-                        Custom Terrarium Kit
-                      </span>
-                    )}
-
-                    {/* Quantity controls */}
-                    <div className="flex items-center gap-3 mt-2">
-                      <div className="flex items-center border border-beige-300 rounded-lg bg-white overflow-hidden text-xs">
-                        <button
-                          onClick={() => updateQuantity(idx, item.quantity - 1)}
-                          className="px-2 py-1 text-charcoal-800 hover:bg-beige-100 font-bold"
-                        >
-                          -
-                        </button>
-                        <span className="px-2 py-1 font-bold min-w-[24px] text-center">
-                          {item.quantity}
-                        </span>
-                        <button
-                          onClick={() => updateQuantity(idx, item.quantity + 1)}
-                          className="px-2 py-1 text-charcoal-800 hover:bg-beige-100 font-bold"
-                        >
-                          +
-                        </button>
-                      </div>
-
-                      <button
-                        onClick={() => removeFromCart(idx)}
-                        className="text-rose-600 hover:text-rose-800 p-1 text-xs transition-colors"
-                        title="Remove"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))
+              renderedCartItems
             )}
           </div>
 
