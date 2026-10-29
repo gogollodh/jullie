@@ -1,10 +1,12 @@
 import React, { memo } from 'react';
-import { useShop } from '../context/ShopContext';
+import { useCart, useWishlist, useCatalog } from '../context/ShopContext';
 import { Heart, ShoppingBag, Eye, Star, Sparkles } from 'lucide-react';
 import { handleImageError } from '../utils/imageFallback';
 
 export const ProductCard = memo(({ product }) => {
-  const { addToCart, wishlist, toggleWishlist, viewProductDetails } = useShop();
+  const { addToCart } = useCart();
+  const { wishlist, toggleWishlist } = useWishlist();
+  const { viewProductDetails } = useCatalog();
 
   const isWishlisted = wishlist.includes(product.id);
 

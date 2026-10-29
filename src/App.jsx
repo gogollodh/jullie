@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import { useShop } from './context/ShopContext';
+import { useNavigation } from './context/ShopContext';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { ToastContainer } from './components/ToastContainer';
@@ -25,7 +25,7 @@ const PageLoader = () => (
 );
 
 export function App() {
-  const { activePage } = useShop();
+  const { activePage } = useNavigation();
 
   const renderPage = () => {
     switch (activePage) {

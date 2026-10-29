@@ -1,71 +1,66 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import { PRODUCTS } from '../data/products';
 
-const ShopContext = createContext();
+// Context Definitions
+export const ToastContext = createContext(null);
+export const NavigationContext = createContext(null);
+export const FilterContext = createContext(null);
+export const WishlistContext = createContext(null);
+export const CartContext = createContext(null);
+export const CatalogContext = createContext(null);
 
-export const ShopProvider = ({ children }) => {
-  const [activePage, setActivePage] = useState('home');
-  const [selectedGuideId, setSelectedGuideId] = useState(null);
+// Domain Hooks
+export const useToast = () => {
+  const context = useContext(ToastContext);
+  if (!context) {
+    throw new Error('useToast must be used within a ToastProvider');
+  }
+  return context;
+};
 
-  // Cart State
-  const [cart, setCart] = useState(() => {
-    try {
-      const saved = localStorage.getItem('sapliing_cart');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      return [];
-    }
-  });
+export const useNavigation = () => {
+  const context = useContext(NavigationContext);
+  if (!context) {
+    throw new Error('useNavigation must be used within a NavigationProvider');
+  }
+  return context;
+};
 
-  // Wishlist State
-  const [wishlist, setWishlist] = useState(() => {
-    try {
-      const saved = localStorage.getItem('sapliing_wishlist');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      return [];
-    }
-  });
+export const useFilter = () => {
+  const context = useContext(FilterContext);
+  if (!context) {
+    throw new Error('useFilter must be used within a FilterProvider');
+  }
+  return context;
+};
 
-  // Recently Viewed State
-  const [recentlyViewed, setRecentlyViewed] = useState([]);
+export const useWishlist = () => {
+  const context = useContext(WishlistContext);
+  if (!context) {
+    throw new Error('useWishlist must be used within a WishlistProvider');
+  }
+  return context;
+};
 
-  // Filters State
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
-  const [priceRange, setPriceRange] = useState(200);
+export const useCart = () => {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  return context;
+};
 
-  // Modals & Drawers
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isWishlistOpen, setIsWishlistOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+export const useCatalog = () => {
+  const context = useContext(CatalogContext);
+  if (!context) {
+    throw new Error('useCatalog must be used within a CatalogProvider');
+  }
+  return context;
+};
+
+// 1. Toast Provider
+export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 
-  // Orders State
-  const [orders, setOrders] = useState([
-    {
-      id: 'SAP-88392',
-      date: 'Sep 20, 2026',
-      status: 'In Transit - Out for Delivery',
-      trackingNumber: '1Z9999999999999999',
-      items: [
-        { name: 'Venus Flytrap "King Henry"', qty: 1, price: 34.00, image: 'https://images.unsplash.com/photo-1620127252536-03bdfcf6d5c3?auto=format&fit=crop&w=400&q=80' }
-      ],
-      total: 39.50
-    }
-  ]);
-
-  // Persist cart and wishlist
-  useEffect(() => {
-    localStorage.setItem('sapliing_cart', JSON.stringify(cart));
-  }, [cart]);
-
-  useEffect(() => {
-    localStorage.setItem('sapliing_wishlist', JSON.stringify(wishlist));
-  }, [wishlist]);
-
-  // Toast Notification helper
   const addToast = useCallback((message, type = 'success') => {
     const id = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
     setToasts((prev) => [...prev, { id, message, type }]);
@@ -78,7 +73,144 @@ export const ShopProvider = ({ children }) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
-  // Cart actions
+  const value = useMemo(() => ({
+    toasts,
+    addToast,
+    removeToast
+  }), [toasts, addToast, removeToast]);
+
+  return (
+    <ToastContext.Provider value={value}>
+      {children}
+    </ToastContext.Provider>
+  );
+};
+
+// 2. Navigation Provider
+export const NavigationProvider = ({ children }) => {
+  const [activePage, setActivePage] = useState('home');
+  const [selectedGuideId, setSelectedGuideId] = useState(null);
+
+  const navigateTo = useCallback((page, guideId = null) => {
+    setActivePage(page);
+    if (guideId !== null && guideId !== undefined) {
+      setSelectedGuideId(guideId);
+    }
+    if (typeof window !== 'undefined' && window.scrollTo) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, []);
+
+  const value = useMemo(() => ({
+    activePage,
+    setActivePage,
+    selectedGuideId,
+    setSelectedGuideId,
+    navigateTo
+  }), [activePage, selectedGuideId, navigateTo]);
+
+  return (
+    <NavigationContext.Provider value={value}>
+      {children}
+    </NavigationContext.Provider>
+  );
+};
+
+// 3. Filter Provider
+export const FilterProvider = ({ children }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
+  const [priceRange, setPriceRange] = useState(200);
+
+  const value = useMemo(() => ({
+    searchQuery,
+    setSearchQuery,
+    selectedCategory,
+    setSelectedCategory,
+    selectedDifficulty,
+    setSelectedDifficulty,
+    priceRange,
+    setPriceRange
+  }), [searchQuery, selectedCategory, selectedDifficulty, priceRange]);
+
+  return (
+    <FilterContext.Provider value={value}>
+      {children}
+    </FilterContext.Provider>
+  );
+};
+
+// 4. Wishlist Provider
+export const WishlistProvider = ({ children }) => {
+  const { addToast } = useToast();
+
+  const [wishlist, setWishlist] = useState(() => {
+    try {
+      const saved = localStorage.getItem('sapliing_wishlist');
+      const parsed = saved ? JSON.parse(saved) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  });
+  const [isWishlistOpen, setIsWishlistOpen] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem('sapliing_wishlist', JSON.stringify(wishlist));
+  }, [wishlist]);
+
+  const toggleWishlist = useCallback((product) => {
+    let message = '';
+    setWishlist((prev) => {
+      const exists = prev.some((id) => id === product.id);
+      if (exists) {
+        message = `Removed "${product.name}" from wishlist`;
+        return prev.filter((id) => id !== product.id);
+      } else {
+        message = `Saved "${product.name}" to wishlist ❤️`;
+        return [...prev, product.id];
+      }
+    });
+    if (message) {
+      addToast(message);
+    }
+  }, [addToast]);
+
+  const value = useMemo(() => ({
+    wishlist,
+    setWishlist,
+    toggleWishlist,
+    isWishlistOpen,
+    setIsWishlistOpen
+  }), [wishlist, toggleWishlist, isWishlistOpen]);
+
+  return (
+    <WishlistContext.Provider value={value}>
+      {children}
+    </WishlistContext.Provider>
+  );
+};
+
+// 5. Cart Provider
+export const CartProvider = ({ children }) => {
+  const { addToast } = useToast();
+
+  const [cart, setCart] = useState(() => {
+    try {
+      const saved = localStorage.getItem('sapliing_cart');
+      const parsed = saved ? JSON.parse(saved) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  });
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem('sapliing_cart', JSON.stringify(cart));
+  }, [cart]);
+
   const addToCart = useCallback((product, quantity = 1, customOptions = null) => {
     setCart((prevCart) => {
       const existingIndex = prevCart.findIndex(
@@ -116,25 +248,50 @@ export const ShopProvider = ({ children }) => {
     setCart([]);
   }, []);
 
-  // Wishlist actions
-  const toggleWishlist = useCallback((product) => {
-    let message = '';
-    setWishlist((prev) => {
-      const exists = prev.some((id) => id === product.id);
-      if (exists) {
-        message = `Removed "${product.name}" from wishlist`;
-        return prev.filter((id) => id !== product.id);
-      } else {
-        message = `Saved "${product.name}" to wishlist ❤️`;
-        return [...prev, product.id];
-      }
-    });
-    if (message) {
-      addToast(message);
-    }
-  }, [addToast]);
+  const cartTotal = useMemo(() => cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0), [cart]);
+  const cartItemCount = useMemo(() => cart.reduce((sum, item) => sum + item.quantity, 0), [cart]);
 
-  // Recently Viewed
+  const value = useMemo(() => ({
+    cart,
+    setCart,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    cartTotal,
+    cartItemCount,
+    isCartOpen,
+    setIsCartOpen
+  }), [cart, addToCart, removeFromCart, updateQuantity, clearCart, cartTotal, cartItemCount, isCartOpen]);
+
+  return (
+    <CartContext.Provider value={value}>
+      {children}
+    </CartContext.Provider>
+  );
+};
+
+// 6. Catalog Provider
+export const CatalogProvider = ({ children }) => {
+  const { cart, clearCart } = useCart();
+  const { navigateTo } = useNavigation();
+  const { addToast } = useToast();
+
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [recentlyViewed, setRecentlyViewed] = useState([]);
+  const [orders, setOrders] = useState([
+    {
+      id: 'SAP-88392',
+      date: 'Sep 20, 2026',
+      status: 'In Transit - Out for Delivery',
+      trackingNumber: '1Z9999999999999999',
+      items: [
+        { name: 'Venus Flytrap "King Henry"', qty: 1, price: 34.00, image: 'https://images.unsplash.com/photo-1620127252536-03bdfcf6d5c3?auto=format&fit=crop&w=400&q=80' }
+      ],
+      total: 39.50
+    }
+  ]);
+
   const markAsViewed = useCallback((product) => {
     setRecentlyViewed((prev) => {
       const filtered = prev.filter((p) => p.id !== product.id);
@@ -146,12 +303,6 @@ export const ShopProvider = ({ children }) => {
     setSelectedProduct(product);
     if (product) markAsViewed(product);
   }, [markAsViewed]);
-
-  const navigateTo = useCallback((page, guideId = null) => {
-    setActivePage(page);
-    if (guideId) setSelectedGuideId(guideId);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
 
   const placeOrder = useCallback((orderDetails) => {
     setOrders((prev) => {
@@ -176,80 +327,59 @@ export const ShopProvider = ({ children }) => {
     addToast('Order successfully placed! Thank you for growing with us 🌱');
   }, [cart, clearCart, navigateTo, addToast]);
 
-  // Memoized aggregations
-  const cartTotal = useMemo(() => cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0), [cart]);
-  const cartItemCount = useMemo(() => cart.reduce((sum, item) => sum + item.quantity, 0), [cart]);
-
-  // Memoize context value to prevent unnecessary consumer re-renders
-  const contextValue = useMemo(() => ({
-    activePage,
-    navigateTo,
-    selectedGuideId,
-    setSelectedGuideId,
-    cart,
-    addToCart,
-    updateQuantity,
-    removeFromCart,
-    clearCart,
-    cartTotal,
-    cartItemCount,
-    wishlist,
-    toggleWishlist,
-    recentlyViewed,
-    searchQuery,
-    setSearchQuery,
-    selectedCategory,
-    setSelectedCategory,
-    selectedDifficulty,
-    setSelectedDifficulty,
-    priceRange,
-    setPriceRange,
-    isCartOpen,
-    setIsCartOpen,
-    isWishlistOpen,
-    setIsWishlistOpen,
+  const value = useMemo(() => ({
     selectedProduct,
     setSelectedProduct,
-    viewProductDetails,
-    toasts,
-    addToast,
-    removeToast,
-    orders,
-    placeOrder
-  }), [
-    activePage,
-    navigateTo,
-    selectedGuideId,
-    cart,
-    addToCart,
-    updateQuantity,
-    removeFromCart,
-    clearCart,
-    cartTotal,
-    cartItemCount,
-    wishlist,
-    toggleWishlist,
     recentlyViewed,
-    searchQuery,
-    selectedCategory,
-    selectedDifficulty,
-    priceRange,
-    isCartOpen,
-    isWishlistOpen,
-    selectedProduct,
+    setRecentlyViewed,
+    markAsViewed,
     viewProductDetails,
-    toasts,
-    addToast,
-    removeToast,
     orders,
+    setOrders,
     placeOrder
-  ]);
+  }), [selectedProduct, recentlyViewed, markAsViewed, viewProductDetails, orders, placeOrder]);
 
   return (
-    <ShopContext.Provider value={contextValue}>
+    <CatalogContext.Provider value={value}>
       {children}
-    </ShopContext.Provider>
+    </CatalogContext.Provider>
   );
 };
 
-export const useShop = () => useContext(ShopContext);
+// Composite ShopProvider
+export const ShopProvider = ({ children }) => {
+  return (
+    <ToastProvider>
+      <NavigationProvider>
+        <FilterProvider>
+          <WishlistProvider>
+            <CartProvider>
+              <CatalogProvider>
+                {children}
+              </CatalogProvider>
+            </CartProvider>
+          </WishlistProvider>
+        </FilterProvider>
+      </NavigationProvider>
+    </ToastProvider>
+  );
+};
+
+// Backward-compatible useShop facade hook
+export const useShop = () => {
+  const toast = useToast();
+  const navigation = useNavigation();
+  const filter = useFilter();
+  const wishlist = useWishlist();
+  const cart = useCart();
+  const catalog = useCatalog();
+
+  return useMemo(() => ({
+    ...navigation,
+    ...cart,
+    ...wishlist,
+    ...filter,
+    ...toast,
+    ...catalog
+  }), [navigation, cart, wishlist, filter, toast, catalog]);
+};

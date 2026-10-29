@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useShop } from '../context/ShopContext';
+import { useWishlist, useCart, useCatalog } from '../context/ShopContext';
 import { PRODUCTS } from '../data/products';
 import { X, Heart, ShoppingBag, Trash2 } from 'lucide-react';
 import { handleImageError } from '../utils/imageFallback';
@@ -9,10 +9,10 @@ export const WishlistDrawer = () => {
     isWishlistOpen,
     setIsWishlistOpen,
     wishlist,
-    toggleWishlist,
-    addToCart,
-    viewProductDetails
-  } = useShop();
+    toggleWishlist
+  } = useWishlist();
+  const { addToCart } = useCart();
+  const { viewProductDetails } = useCatalog();
 
   const wishlistSet = useMemo(() => new Set(wishlist), [wishlist]);
 

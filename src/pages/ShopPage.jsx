@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { useShop } from '../context/ShopContext';
+import { useFilter } from '../context/ShopContext';
 import { PRODUCTS } from '../data/products';
 import { ProductCard } from '../components/ProductCard';
 import { Search, Filter, SlidersHorizontal, RefreshCw } from 'lucide-react';
@@ -25,7 +25,7 @@ export const ShopPage = () => {
     setSelectedDifficulty,
     priceRange,
     setPriceRange
-  } = useShop();
+  } = useFilter();
 
   const [sortBy, setSortBy] = useState('featured'); // 'featured', 'price-low', 'price-high', 'rating'
 

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useShop } from '../context/ShopContext';
+import { useNavigation, useFilter, useToast } from '../context/ShopContext';
 import { PRODUCTS, CATEGORIES } from '../data/products';
 import { GUIDES } from '../data/guides';
 import { REVIEWS } from '../data/reviews';
@@ -12,7 +12,9 @@ import {
 } from 'lucide-react';
 
 export const HomePage = () => {
-  const { navigateTo, setSelectedCategory, addToast } = useShop();
+  const { navigateTo } = useNavigation();
+  const { setSelectedCategory } = useFilter();
+  const { addToast } = useToast();
 
   const featuredProducts = useMemo(() => PRODUCTS.slice(0, 8), []);
   const carnivorousShowcaseProducts = useMemo(() => PRODUCTS.filter((p) => p.category === 'carnivorous').slice(0, 3), []);

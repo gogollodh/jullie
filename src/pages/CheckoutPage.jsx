@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { useShop } from '../context/ShopContext';
+import { useCart, useCatalog, useNavigation } from '../context/ShopContext';
 import { ShieldCheck, Truck, CreditCard, Lock, ArrowLeft, CheckCircle2 } from 'lucide-react';
 
 export const CheckoutPage = () => {
-  const { cart, cartTotal, placeOrder, navigateTo } = useShop();
+  const { cart, cartTotal } = useCart();
+  const { placeOrder } = useCatalog();
+  const { navigateTo } = useNavigation();
 
   const [address, setAddress] = useState({
     firstName: 'Julian',

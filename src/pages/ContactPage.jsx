@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useShop } from '../context/ShopContext';
+import { useToast } from '../context/ShopContext';
 import { Mail, Phone, MapPin, Clock, Send, CheckCircle2 } from 'lucide-react';
 
 export const ContactPage = () => {
-  const { addToast } = useShop();
+  const { addToast } = useToast();
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
 

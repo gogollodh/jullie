@@ -1,19 +1,12 @@
 import React, { useState } from 'react';
-import { useShop } from '../context/ShopContext';
+import { useNavigation, useCart, useWishlist, useFilter } from '../context/ShopContext';
 import { ShoppingBag, Heart, Search, Menu, X, Leaf, Sparkles, User } from 'lucide-react';
 
 export const Navbar = () => {
-  const {
-    activePage,
-    navigateTo,
-    cartItemCount,
-    wishlist,
-    setIsCartOpen,
-    setIsWishlistOpen,
-    searchQuery,
-    setSearchQuery,
-    setSelectedCategory
-  } = useShop();
+  const { activePage, navigateTo } = useNavigation();
+  const { cartItemCount, setIsCartOpen } = useCart();
+  const { wishlist, setIsWishlistOpen } = useWishlist();
+  const { searchQuery, setSearchQuery, setSelectedCategory } = useFilter();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);

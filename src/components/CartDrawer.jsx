@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useShop } from '../context/ShopContext';
+import { useCart, useNavigation, useToast } from '../context/ShopContext';
 import { X, Trash2, ShoppingBag, ArrowRight, ShieldCheck, Tag } from 'lucide-react';
 import { handleImageError } from '../utils/imageFallback';
 
@@ -10,10 +10,10 @@ export const CartDrawer = () => {
     cart,
     updateQuantity,
     removeFromCart,
-    cartTotal,
-    navigateTo,
-    addToast
-  } = useShop();
+    cartTotal
+  } = useCart();
+  const { navigateTo } = useNavigation();
+  const { addToast } = useToast();
 
   const [promoCode, setPromoCode] = useState('');
   const [discount, setDiscount] = useState(0);

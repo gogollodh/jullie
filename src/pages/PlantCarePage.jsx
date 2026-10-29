@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from 'react';
-import { useShop } from '../context/ShopContext';
+import { useNavigation } from '../context/ShopContext';
 import { GUIDES } from '../data/guides';
 import { BookOpen, Search, Sparkles, ArrowLeft, Sun, Droplets, ShieldAlert, Check } from 'lucide-react';
 import { handleImageError } from '../utils/imageFallback';
 
 export const PlantCarePage = () => {
-  const { selectedGuideId, setSelectedGuideId } = useShop();
+  const { selectedGuideId, setSelectedGuideId } = useNavigation();
 
   const [activeGuide, setActiveGuide] = useState(() => {
     if (selectedGuideId) {

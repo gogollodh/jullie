@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { useShop } from '../context/ShopContext';
+import { useNavigation, useFilter, useToast } from '../context/ShopContext';
 import { Leaf, Instagram, Facebook, Mail, ArrowRight, ShieldCheck, MapPin, Clock } from 'lucide-react';
 
 export const Footer = () => {
-  const { navigateTo, setSelectedCategory, addToast } = useShop();
+  const { navigateTo } = useNavigation();
+  const { setSelectedCategory } = useFilter();
+  const { addToast } = useToast();
   const [email, setEmail] = useState('');
 
   const handleNewsletterSubmit = (e) => {

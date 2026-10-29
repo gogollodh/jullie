@@ -1,10 +1,10 @@
 import React from 'react';
-import { useShop } from '../context/ShopContext';
+import { useNavigation } from '../context/ShopContext';
 import { Leaf, Sparkles, Compass, ShieldCheck, Heart, ArrowRight } from 'lucide-react';
 import { handleImageError } from '../utils/imageFallback';
 
 export const AboutPage = () => {
-  const { navigateTo } = useShop();
+  const { navigateTo } = useNavigation();
 
   return (
     <div className="bg-beige-50 min-h-screen py-16 px-4 sm:px-6 lg:px-8 space-y-16">

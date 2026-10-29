@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useShop } from '../context/ShopContext';
+import { useCatalog, useCart, useWishlist, useNavigation } from '../context/ShopContext';
 import { PRODUCTS } from '../data/products';
 import { ProductCard } from './ProductCard';
 import { handleImageError } from '../utils/imageFallback';
@@ -10,7 +10,10 @@ import {
 } from 'lucide-react';
 
 export const ProductDetailModal = () => {
-  const { selectedProduct, setSelectedProduct, addToCart, wishlist, toggleWishlist, navigateTo } = useShop();
+  const { selectedProduct, setSelectedProduct } = useCatalog();
+  const { addToCart } = useCart();
+  const { wishlist, toggleWishlist } = useWishlist();
+  const { navigateTo } = useNavigation();
 
   const [selectedImg, setSelectedImg] = useState(0);
   const [activeTab, setActiveTab] = useState('care'); // 'care', 'faqs', 'reviews', 'shipping'

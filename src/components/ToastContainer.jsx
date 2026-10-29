@@ -1,9 +1,9 @@
 import React from 'react';
-import { useShop } from '../context/ShopContext';
+import { useToast } from '../context/ShopContext';
 import { CheckCircle, Info, X } from 'lucide-react';
 
 export const ToastContainer = () => {
-  const { toasts, removeToast } = useShop();
+  const { toasts, removeToast } = useToast();
 
   if (!toasts.length) return null;
 

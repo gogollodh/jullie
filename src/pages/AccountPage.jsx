@@ -1,11 +1,12 @@
 import React from 'react';
-import { useShop } from '../context/ShopContext';
+import { useCatalog, useNavigation } from '../context/ShopContext';
 import { Package, Truck, CheckCircle, Clock, MapPin, ShieldCheck, ArrowRight } from 'lucide-react';
 import { handleImageError } from '../utils/imageFallback';
 import { AccessibleImage } from '../components/ui/AccessibleImage';
 
 export const AccountPage = () => {
-  const { orders, navigateTo } = useShop();
+  const { orders } = useCatalog();
+  const { navigateTo } = useNavigation();
 
   return (
     <div className="bg-beige-50 min-h-screen py-12 px-4 sm:px-6 lg:px-8">

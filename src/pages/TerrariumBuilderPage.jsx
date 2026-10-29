@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useShop } from '../context/ShopContext';
+import { useCart, useNavigation } from '../context/ShopContext';
 import { Sparkles, Check, ArrowRight, ShieldCheck, RefreshCw } from 'lucide-react';
 import { handleImageError } from '../utils/imageFallback';
 import { AccessibleImage } from '../components/ui/AccessibleImage';
 
 export const TerrariumBuilderPage = () => {
-  const { addToCart, navigateTo } = useShop();
+  const { addToCart } = useCart();
+  const { navigateTo } = useNavigation();
 
   const vessels = [
     { id: 'apothecary-jar', name: 'Vintage Apothecary Jar (Glass Cork Lid)', price: 35.00, img: 'https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=400&q=80' },
