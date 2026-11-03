@@ -199,7 +199,7 @@ export const PRODUCTS = [
     slug: 'moss-haven-ready-made-terrarium',
     name: 'The "Moss Haven" Apothecary Glass Terrarium',
     scientificName: 'Handcrafted Ecosystem',
-    category: 'terrariums',
+    category: 'terrarium',
     price: 125.00,
     rating: 4.9,
     reviewCount: 62,

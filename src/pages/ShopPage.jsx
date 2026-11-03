@@ -4,10 +4,9 @@ import { PRODUCTS } from '../data/products';
 import { ProductCard } from '../components/ProductCard';
 import { Search, Filter, SlidersHorizontal, RefreshCw } from 'lucide-react';
 
-const CATEGORY_OPTIONS = [
+export const CATEGORY_OPTIONS = [
   { id: 'all', label: 'All Plants' },
   { id: 'carnivorous', label: 'Carnivorous Plants' },
-  { id: 'terrariums', label: 'Living Terrariums' },
   { id: 'terrarium', label: 'Terrarium Plants & Moss' },
   { id: 'exotic', label: 'Exotic Plants' },
   { id: 'supplies', label: 'Care & Craft Supplies' }

@@ -99,7 +99,7 @@ export const Footer = () => {
                 </button>
               </li>
               <li>
-                <button onClick={() => { setSelectedCategory('terrariums'); navigateTo('shop'); }} className="hover:text-moss-300 transition-colors">
+                <button onClick={() => { setSelectedCategory('terrarium'); navigateTo('shop'); }} className="hover:text-moss-300 transition-colors">
                   Living Terrariums
                 </button>
               </li>

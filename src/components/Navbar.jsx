@@ -15,7 +15,7 @@ export const Navbar = () => {
     { label: 'Home', page: 'home' },
     { label: 'Shop', page: 'shop', category: 'all' },
     { label: 'Carnivorous Plants', page: 'shop', category: 'carnivorous' },
-    { label: 'Terrariums', page: 'shop', category: 'terrariums' },
+    { label: 'Terrariums', page: 'shop', category: 'terrarium' },
     { label: 'Exotic Plants', page: 'shop', category: 'exotic' },
     { label: 'Terrarium Builder', page: 'builder' },
     { label: 'Plant Care', page: 'care' },

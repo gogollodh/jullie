@@ -62,7 +62,7 @@ export const TerrariumBuilderPage = () => {
       id: `custom-terrarium-${Date.now()}`,
       name: `Custom Terrarium: "${customName}"`,
       scientificName: 'Personalized Living Ecosystem Kit',
-      category: 'terrariums',
+      category: 'terrarium',
       price: calculateTotal(),
       image: selectedVessel.img,
       shortDesc: `Glass vessel: ${selectedVessel.name} with ${selectedPlants.map((p) => p.name).join(', ')}.`,

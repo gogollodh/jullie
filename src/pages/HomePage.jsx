@@ -345,7 +345,7 @@ export const HomePage = () => {
               <div className="flex flex-wrap gap-4">
                 <button
                   onClick={() => {
-                    setSelectedCategory('terrariums');
+                    setSelectedCategory('terrarium');
                     navigateTo('shop');
                   }}
                   className="bg-moss-800 hover:bg-moss-700 text-beige-50 font-semibold px-6 py-3.5 rounded-xl transition-colors text-sm inline-flex items-center gap-2 shadow-md"
