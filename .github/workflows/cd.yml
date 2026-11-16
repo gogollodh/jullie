@@ -11,8 +11,33 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  test:
+    name: Run Pre-Deployment Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run test suite
+        run: npm test
+
+      - name: Build production bundle
+        run: npm run build
+
+      - name: Verify asset size budget
+        run: npm run check-budget
+
   staging:
     name: Deploy to Staging
+    needs: test
     runs-on: ubuntu-latest
     environment:
       name: staging
