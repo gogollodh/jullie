@@ -8,6 +8,7 @@
     "build": "vite build",
     "lint": "echo 'No lint errors'",
     "preview": "vite preview --port 4173 --host",
+    "prepare": "sh .githooks/setup.sh",
     "check-budget": "node scripts/check-bundle-size.js",
     "test:concurrency:sh": "sh tests/test_concurrency.sh",
     "test:concurrency:jsx": "vitest run",
